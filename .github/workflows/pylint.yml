@@ -1,0 +1,29 @@
+name: Pylint
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v4
+    
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.13
+
+    - name: Configure venv
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pylint
+        
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py')
