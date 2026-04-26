@@ -14,16 +14,20 @@ jobs:
       with:
         python-version: 3.13
 
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl1 libgl1
+
     - name: Configure venv
       run: |
         python3 -m venv venv
-        source venv/bin/activate
         
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
-        pip install pylint
+        ./venv/bin/python -m pip install --upgrade pip
+        ./venv/bin/python -m pip install -r requirements.txt pylint
         
     - name: Analysing the code with pylint
       run: |
-        pylint --rcfile .pylintrc $(git ls-files '*.py')
+        ./venv/bin/python -m pylint --rcfile .pylintrc $(git ls-files '*.py')
